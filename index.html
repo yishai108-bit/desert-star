@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Desert Star</title>
+<link rel="canonical" href="https://yishai108-bit.github.io/desert-star/">
+<link rel="alternate" hreflang="he" href="https://yishai108-bit.github.io/desert-star/">
+<link rel="alternate" hreflang="en" href="https://yishai108-bit.github.io/desert-star/en/">
+<link rel="alternate" hreflang="ru" href="https://yishai108-bit.github.io/desert-star/ru/">
+<link rel="alternate" hreflang="x-default" href="https://yishai108-bit.github.io/desert-star/">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="תצפיות כוכבים עם טלסקופים גדולים במכתש רמון, טיולי ג'יפים וטיולי הליכה. משה קוגן, מורה דרך ותושב מצפה רמון. הדרכה בעברית, אנגלית ורוסית.">
 <meta property="og:title" content="Desert Star | תצפית כוכבים במכתש רמון">
@@ -12,6 +17,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://yishai108-bit.github.io/desert-star/">
+<meta property="og:locale" content="he_IL">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,6 +77,12 @@ strong{font-weight:700}
 .rv-d1{transition-delay:.12s}.rv-d2{transition-delay:.24s}.rv-d3{transition-delay:.36s}
 
 /* header */
+@media (max-width:640px){.top .btn{display:none}}
+.lang{display:flex;gap:4px;font-family:var(--display);font-size:14px}
+.lang a{text-decoration:none;color:var(--fg-dim);padding:6px 8px;border-radius:999px;border:1px solid transparent}
+.lang a[aria-current]{color:#fff;border-color:var(--line);background:rgba(255,255,255,.06)}
+.lang a:hover{color:#fff}
+.top .right{display:flex;align-items:center;gap:10px}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(7,12,34,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px}
 .top img{height:44px;width:auto}
@@ -268,7 +280,7 @@ strong{font-weight:700}
       <a href="#about">מי מדריך</a>
       <a href="#faq">שאלות</a>
     </nav>
-    <a class="btn btn-main btn-sm" href="https://wa.me/972526052744" data-wa="היי משה, הגעתי מהאתר ואשמח לפרטים וזמינות לערב כוכבים" target="_blank" rel="noopener">לתיאום ערב כוכבים</a>
+    <div class="right"><nav class="lang" aria-label="Language"><a href="https://yishai108-bit.github.io/desert-star/" aria-current="page">עב</a><a href="https://yishai108-bit.github.io/desert-star/en/">EN</a><a href="https://yishai108-bit.github.io/desert-star/ru/">RU</a></nav><a class="btn btn-main btn-sm" href="https://wa.me/972526052744" data-wa="היי משה, הגעתי מהאתר ואשמח לפרטים וזמינות לערב כוכבים" target="_blank" rel="noopener">לתיאום ערב כוכבים</a></div>
   </div>
 </header>
 
