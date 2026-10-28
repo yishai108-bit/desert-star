@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Desert Star</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="תצפיות כוכבים עם טלסקופים גדולים במכתש רמון, טיולי ג'יפים וטיולי הליכה. משה קוגן, מורה דרך ותושב מצפה רמון. הדרכה בעברית, אנגלית ורוסית.">
+<meta property="og:title" content="Desert Star | תצפית כוכבים במכתש רמון">
+<meta property="og:description" content="ערב אחד מתחת לשביל החלב, עם טלסקופים גדולים ומורה דרך תושב מצפה רמון. גם ג'יפים והליכה במכתש.">
+<meta property="og:image" content="https://yishai108-bit.github.io/desert-star/og.jpg?v=1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://yishai108-bit.github.io/desert-star/">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Assistant:wght@300;400;600;700&display=swap">
+<style>
+/* Layout: one fixed starry sky under the whole page. The hero is a stack of parallax layers (twinkling canvas,
+   Milky Way photo, glow, desert ridge, text) that slide at different speeds on scroll. Sections follow the funnel:
+   offer, how it works, price, proof, other activities, guide, objections, contact. One column on the phone, up to
+   three on desktop. Warm orange pill buttons everywhere, a sticky WhatsApp bar on the phone. */
+:root{
+  --night:#070c22; --navy:#0a2234; --panel:rgba(8,20,40,.78); --panel-2:rgba(16,59,91,.55);
+  --sky:#c7e5f8; --sky-2:#8fc6ea; --fg:#fdfdfd; --fg-dim:#b9c9d6; --line:rgba(199,229,248,.22);
+  --accent:#f49d37; --accent-2:#ffb45c; --accent-ink:#2a1600;
+  --wa:#25d366; --wa-ink:#0b3d22;
+  --card:#ffffff; --card-ink:#1b2630; --card-dim:#5c6d7a;
+  --display:'Varela Round','Assistant','Arial Hebrew',Arial,sans-serif;
+  --body:'Assistant','Heebo','Arial Hebrew',Arial,system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--fg);font-family:var(--body);font-size:18px;line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night)}
+#page{direction:rtl;overflow-x:clip;position:relative}
+.sky{position:fixed;inset:0;z-index:-1;background:var(--night) url(img/bg-sky.jpg) center/cover no-repeat}
+.sky::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,12,34,.25),rgba(7,12,34,.55))}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.2;margin:0;text-wrap:balance}
+h2{font-size:clamp(32px,5vw,54px);color:var(--sky);text-shadow:0 2px 24px rgba(0,0,0,.5)}
+h3{font-size:clamp(24px,3vw,30px)}
+p{margin:0}
+strong{font-weight:700}
+.wrap{max-width:1120px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.narrow{max-width:760px}
+.center{text-align:center}
+.band{padding-block:clamp(60px,8vw,100px)}
+.panel{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.lead{color:var(--fg);font-size:20px;line-height:1.65}
+.dim{color:var(--fg-dim)}
+.dots{display:flex;justify-content:center;gap:7px;margin:4px auto}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--accent);display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px;border-radius:999px;font-family:var(--display);font-size:18px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease,box-shadow .15s ease;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.btn-main{background:var(--accent);color:var(--accent-ink)}
+.btn-main:hover{background:var(--accent-2)}
+.btn-wa{background:var(--wa);color:var(--wa-ink)}
+.btn-ghost{background:rgba(255,255,255,.08);color:var(--fg);border:1px solid var(--line);box-shadow:none}
+.btn svg{width:20px;height:20px;flex:none}
+.btn-sm{padding:10px 18px;font-size:16px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px}
+
+/* scroll reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+.rv-d1{transition-delay:.12s}.rv-d2{transition-delay:.24s}.rv-d3{transition-delay:.36s}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(7,12,34,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px}
+.top img{height:44px;width:auto}
+.nav{display:none;gap:24px;font-size:17px;font-weight:600}
+.nav a{text-decoration:none;color:var(--sky)}
+.nav a:hover{color:#fff}
+@media (min-width:900px){.nav{display:flex}.top img{height:52px}}
+
+/* hero: parallax stack */
+.hero{position:relative;isolation:isolate;overflow:hidden;min-height:min(92vh,820px);min-height:min(92svh,820px);display:grid;align-items:center;background:var(--night)}
+.layer{position:absolute;inset:-12% 0;will-change:transform;pointer-events:none}
+.l-stars{z-index:0}
+.l-stars canvas{width:100%;height:100%;display:block}
+.l-photo{z-index:1}
+.l-photo picture,.l-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.l-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,12,34,.55) 0%,rgba(7,12,34,.15) 40%,rgba(7,12,34,.35) 75%,var(--night) 100%)}
+.l-glow{z-index:2;background:radial-gradient(60% 45% at 50% 100%,rgba(244,157,55,.28),rgba(244,157,55,0) 70%)}
+.l-ridge{z-index:3;inset:auto 0 -2px;height:34%;color:var(--night)}
+.l-ridge svg{width:100%;height:100%;display:block}
+.hero .wrap{position:relative;z-index:4;padding-block:56px 72px;width:100%}
+.hero-in{max-width:760px;margin-inline:auto;display:grid;gap:18px;justify-items:center;text-align:center;animation:rise 1s ease-out both;will-change:transform,opacity}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero .emblem{width:min(34vw,150px);filter:drop-shadow(0 6px 24px rgba(0,0,0,.6));animation:glow 4s ease-in-out infinite}
+@keyframes glow{0%,100%{filter:drop-shadow(0 6px 24px rgba(0,0,0,.6)) drop-shadow(0 0 0 rgba(244,195,90,0))}50%{filter:drop-shadow(0 6px 24px rgba(0,0,0,.6)) drop-shadow(0 0 18px rgba(244,195,90,.45))}}
+.hero .logo{width:min(70vw,400px);margin-top:-6px;filter:drop-shadow(0 6px 24px rgba(0,0,0,.6))}
+.hero h1{font-size:clamp(32px,5vw,52px);color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.hero h1 span{display:block;color:var(--sky);font-size:.62em;margin-top:10px;font-family:var(--body);font-weight:600}
+.hero .lead{max-width:32em;text-shadow:0 1px 12px rgba(0,0,0,.7)}
+.down{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid var(--line);backdrop-filter:blur(8px);display:grid;place-items:center;color:#fff;text-decoration:none;animation:bob 2.4s ease-in-out infinite}
+.down svg{width:20px;height:20px}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+/* trust strip */
+.trust{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.trust .wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;padding-block:22px}
+.t{display:grid;gap:4px;justify-items:center;text-align:center;font-size:15px;color:var(--fg-dim);line-height:1.35}
+.t b{font-family:var(--display);font-weight:400;font-size:17px;color:#fff}
+.t svg{width:26px;height:26px;color:var(--accent);margin-bottom:2px}
+@media (min-width:760px){.trust .wrap{grid-template-columns:repeat(4,1fr);padding-block:26px}.t{font-size:16px}.t b{font-size:19px}}
+
+/* offer */
+.offer{display:grid;gap:26px}
+.offer-img{position:relative;border-radius:24px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5);aspect-ratio:4/3}
+.offer-img img{width:100%;height:100%;object-fit:cover}
+.offer-img .badge{position:absolute;top:14px;right:14px;background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:14px;padding:7px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.offer-t{display:grid;gap:16px;align-content:center}
+.offer-t h2{text-align:right}
+.offer-t .kicker{font-family:var(--display);color:var(--accent);font-size:16px;letter-spacing:.02em}
+.inc{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.inc li{display:flex;gap:10px;align-items:flex-start;font-size:17px}
+.inc svg{width:22px;height:22px;flex:none;color:var(--accent);margin-top:3px}
+.pricebox{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;padding:16px 18px;border-radius:16px;background:var(--panel-2);border:1px solid var(--line)}
+.pricebox b{font-family:var(--display);font-weight:400;font-size:34px;color:var(--accent)}
+.pricebox span{font-size:16px;color:var(--fg)}
+.pricebox small{flex-basis:100%;font-size:14px;color:var(--fg-dim)}
+.offer .ctas{justify-content:flex-start;margin-top:4px}
+@media (min-width:900px){.offer{grid-template-columns:1fr 1fr;gap:48px;align-items:center}.offer-img{aspect-ratio:5/4}}
+@media (max-width:899px){.offer-t{text-align:center;justify-items:center}.offer-t h2{text-align:center}.offer .ctas{justify-content:center}.inc li{text-align:right}}
+
+/* section heads */
+.sec-head{display:grid;gap:12px;justify-items:center;text-align:center;margin-bottom:40px}
+.sec-head p{max-width:38em}
+
+/* evening steps */
+.steps{display:grid;gap:22px}
+.step{background:var(--panel-2);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid;text-align:center;position:relative}
+.step img{aspect-ratio:4/3;object-fit:cover;width:100%}
+.step .n{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-family:var(--display);display:grid;place-items:center;font-size:18px}
+.step div.b{padding:18px 18px 22px;display:grid;gap:8px}
+.step h3{color:var(--sky);font-size:24px}
+.step p{color:var(--fg)}
+@media (min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+
+/* prices */
+.prices{display:grid;gap:18px}
+.pcard{background:var(--panel-2);border:1px solid var(--line);border-radius:20px;padding:24px 22px 26px;display:grid;gap:14px;align-content:start}
+.pcard.hot{border-color:rgba(244,157,55,.6);box-shadow:0 0 0 1px rgba(244,157,55,.3),0 20px 50px rgba(0,0,0,.4)}
+.pcard h3{color:var(--sky);text-align:center}
+.pcard .who{color:var(--fg-dim);font-size:16px;text-align:center}
+.pcard img{border-radius:12px;aspect-ratio:3/2;object-fit:cover;width:100%}
+.rows{display:grid;border-top:1px solid var(--line)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:17px}
+.row b{font-family:var(--display);font-weight:400;font-size:24px;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
+.row small{color:var(--fg-dim);font-size:14px;display:block}
+.note{font-size:15px;color:var(--fg-dim)}
+.pcard .btn{justify-self:center;margin-top:4px}
+@media (min-width:900px){.prices{grid-template-columns:1fr 1fr 0.85fr;gap:22px}}
+.policy{margin-top:26px;display:grid;gap:8px;padding:20px 22px;border-radius:16px;background:rgba(244,157,55,.14);border:1px solid rgba(244,157,55,.4);text-align:center}
+.policy p{color:#fff}
+
+/* reviews */
+.quotes{display:grid;gap:34px 22px}
+.q{display:grid;gap:10px;justify-items:center}
+.q .mark{font-family:Georgia,serif;font-size:64px;line-height:.6;color:var(--accent);height:28px}
+.q .bubble{background:var(--card);color:var(--card-ink);border-radius:14px;padding:18px 18px 16px;width:100%;box-shadow:0 14px 40px rgba(0,0,0,.45);display:grid;gap:10px}
+.q .by{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.q .av{width:36px;height:36px;border-radius:50%;background:#103b5b;color:#fff;display:grid;place-items:center;font-family:var(--display);font-size:16px;flex:none}
+.q .by small{display:block;font-weight:400;color:var(--card-dim);font-size:13px}
+.q p{font-size:16px;line-height:1.55}
+.q .stars{color:var(--sky-2);letter-spacing:3px;font-size:18px}
+@media (min-width:760px){.quotes{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.quotes{grid-template-columns:repeat(4,1fr)}}
+
+/* other activities */
+.card{background:var(--card);color:var(--card-ink);border-radius:22px;overflow:hidden;display:grid;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.card img{width:100%;aspect-ratio:3/2;object-fit:cover}
+.card-b{padding:24px 24px 26px;display:grid;gap:12px;align-content:start;text-align:center;justify-items:center}
+.card h3{color:#0a2234;font-size:28px}
+.card .tag{font-family:var(--display);font-size:14px;color:#d8872b;letter-spacing:.03em}
+.card p{color:#2f3e4a;max-width:34em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips span{font-size:14px;padding:5px 12px;border-radius:999px;background:#eaf4fb;color:#0a2234;font-weight:600}
+.price{font-family:var(--display);font-size:20px;color:#0a2234;margin-top:4px}
+.price small{display:block;font-family:var(--body);font-size:15px;color:var(--card-dim);font-weight:400}
+.card .btn{margin-top:8px}
+.two{display:grid;gap:22px}
+@media (min-width:900px){.two{grid-template-columns:1fr 1fr}}
+
+/* gallery */
+.gal{padding-block:10px 40px}
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));scrollbar-width:thin}
+.strip img{height:240px;width:auto;flex:none;border-radius:12px;scroll-snap-align:start;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+@media (min-width:900px){.strip img{height:300px}}
+
+/* about */
+.about{display:grid;gap:26px}
+.about img{border-radius:22px;width:100%;aspect-ratio:4/5;object-fit:cover;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.about-t{display:grid;gap:14px;align-content:center;text-align:center}
+.about-t p{max-width:34em;margin-inline:auto}
+.about-t blockquote{margin:6px auto 0;padding:14px 18px;border-radius:14px;background:rgba(244,157,55,.14);border:1px solid rgba(244,157,55,.4);font-family:var(--display);font-size:20px;color:#fff;line-height:1.45;max-width:30em}
+@media (min-width:900px){.about{grid-template-columns:1fr 1fr;gap:56px;align-items:center}.about-t{text-align:right}.about-t p,.about-t blockquote{margin-inline:0}}
+
+/* faq */
+.faq{display:grid;gap:8px;max-width:800px;margin-inline:auto}
+.faq details{background:var(--card);color:var(--card-ink);border-radius:12px;overflow:hidden}
+.faq summary{cursor:pointer;padding:16px 18px;font-family:var(--display);font-size:18px;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;color:#0a2234}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:#d8872b;font-size:28px;line-height:1;flex:none}
+.faq details[open] summary::after{content:"–"}
+.faq .a{padding:0 18px 18px;color:#2f3e4a;max-width:40em}
+
+/* contact */
+.contact{display:grid;gap:22px}
+.ccard{background:var(--panel-2);border:1px solid var(--line);border-radius:22px;padding:26px 24px;display:grid;gap:14px;align-content:start}
+.ccard h3{color:var(--accent);font-size:26px}
+.ccard .big{font-family:var(--display);font-size:22px;color:#fff}
+.clist{display:grid;gap:10px;margin-top:6px}
+.clist a{display:flex;align-items:center;gap:12px;text-decoration:none;font-size:19px;padding:10px 0;border-bottom:1px solid var(--line)}
+.clist svg{width:24px;height:24px;flex:none;color:var(--sky)}
+.form{background:var(--card);color:var(--card-ink);border-radius:22px;padding:26px 22px;display:grid;gap:14px}
+.form h3{color:#0a2234;text-align:center}
+.grid2{display:grid;gap:12px}
+@media (min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+.f{display:grid;gap:6px;font-size:15px;font-weight:600;color:#2f3e4a;min-width:0}
+.f input,.f select,.f textarea{font:inherit;font-weight:400;font-size:16px;padding:11px 12px;border:1px solid #c9d6e0;border-radius:10px;background:#fff;color:#1b2630;width:100%;min-width:0}
+.f textarea{min-height:88px;resize:vertical}
+.form .btn{justify-self:center}
+.form .note{color:var(--card-dim);text-align:center}
+@media (min-width:900px){.contact{grid-template-columns:0.9fr 1.1fr;gap:28px;align-items:start}}
+
+/* footer */
+.foot{background:#061227;padding-block:34px;border-top:1px solid var(--line)}
+.foot .wrap{display:grid;gap:18px;justify-items:center;text-align:center}
+.foot img{height:48px;width:auto;opacity:.95}
+.foot nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;font-size:15px}
+.foot nav a{color:var(--fg-dim);text-decoration:none}
+.foot nav a:hover{color:#fff}
+.foot small{font-size:14px;color:var(--fg-dim)}
+.foot small a{color:var(--fg-dim)}
+
+/* sticky phone bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:8;display:flex;gap:10px;padding:10px max(14px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:rgba(7,12,34,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s ease}
+.bar.on{transform:none}
+.bar .btn{flex:1;padding:12px 14px;font-size:17px;box-shadow:none}
+.bar .call{flex:0 0 52px;width:52px;padding:0;background:rgba(255,255,255,.1);border:1px solid var(--line);color:#fff}
+@media (min-width:900px){.bar{display:none}}
+@media (max-width:899px){.foot{padding-bottom:110px}}
+
+@media (prefers-reduced-motion:reduce){.hero-in,.down,.hero .emblem{animation:none}.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+<div id="page" lang="he">
+<div class="sky" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap">
+    <a href="#top" aria-label="Desert Star, לראש העמוד"><img src="img/logo-full.png" alt="Desert Star, the path is here we just walk it"></a>
+    <nav class="nav" aria-label="ניווט">
+      <a href="#offer">ערב כוכבים</a>
+      <a href="#prices">מחירים</a>
+      <a href="#reviews">המלצות</a>
+      <a href="#more">ג'יפים והליכה</a>
+      <a href="#about">מי מדריך</a>
+      <a href="#faq">שאלות</a>
+    </nav>
+    <a class="btn btn-main btn-sm" href="https://wa.me/972526052744" data-wa="היי משה, הגעתי מהאתר ואשמח לפרטים וזמינות לערב כוכבים" target="_blank" rel="noopener">לתיאום ערב כוכבים</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="layer l-stars" data-k=".7" aria-hidden="true"><canvas id="stars"></canvas></div>
+  <div class="layer l-photo" data-k=".45">
+    <picture>
+      <source media="(min-width: 760px)" srcset="img/hero2-h.jpg">
+      <img src="img/hero2-v.jpg" alt="טלסקופ גדול על רקע שביל החלב במכתש רמון" fetchpriority="high">
+    </picture>
+  </div>
+  <div class="layer l-glow" data-k=".3" aria-hidden="true"></div>
+  <div class="layer l-ridge" data-k=".08" aria-hidden="true">
+    <svg viewBox="0 0 1440 300" preserveAspectRatio="none">
+      <path fill="#0b1a33" d="M0 190 C120 170 200 140 330 150 C460 160 520 120 650 125 C780 130 850 170 980 160 C1110 150 1200 110 1300 120 C1380 128 1410 150 1440 155 L1440 300 L0 300 Z"/>
+      <path fill="currentColor" d="M0 230 C140 215 220 190 360 200 C500 210 580 180 700 185 C820 190 900 225 1030 215 C1160 205 1250 175 1340 185 C1400 192 1420 205 1440 208 L1440 300 L0 300 Z"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="hero-in" id="hero-in">
+      <img class="emblem" src="img/emblem.png" alt="">
+      <img class="logo" src="img/logo-white.png" alt="Desert Star, the path is here we just walk it">
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h1>ערב אחד מתחת לשביל החלב.<span>תצפית כוכבים עם טלסקופים גדולים במכתש רמון</span></h1>
+      <p class="lead">כעשר דקות ממצפה רמון, בשמורת אור הכוכבים. עם משה קוגן, מורה דרך ותושב המקום.
+      מתאים לזוגות, למשפחות ולקבוצות. בעברית, באנגלית וברוסית.</p>
+      <div class="ctas">
+        <a class="btn btn-main" href="https://wa.me/972526052744" data-wa="היי משה, הגעתי מהאתר ואשמח לפרטים וזמינות לערב כוכבים" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3.3 4.4c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.3s1 2.7 1.1 2.9c.2.2 2 3.1 4.9 4.2 2.4.9 2.9.8 3.4.7.5 0 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3l-2-.9c-.3-.1-.5-.2-.7.1l-.9 1.1c-.2.2-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5z"/></svg>
+          לפרטים וזמינות בוואטסאפ
+        </a>
+        <a class="btn btn-ghost" href="#more">גם ג'יפים והליכה</a>
+      </div>
+    </div>
+  </div>
+  <a class="down" href="#offer" aria-label="לגלול למטה"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m0 0l-6-6m6 6l6-6"/></svg></a>
+</section>
+
+<div class="trust">
+  <div class="wrap">
+    <div class="t rv"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l2.4 6.6H21l-5.4 4 2.1 6.6L12 15.2l-5.7 4 2.1-6.6-5.4-4h6.6z"/></svg><b>שמורת אור כוכבים</b>היחידה במזרח התיכון</div>
+    <div class="t rv rv-d1"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg><b>מורה דרך מקומי</b>תושב מצפה רמון מ-2014</div>
+    <div class="t rv rv-d2"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 9h-2.9a15 15 0 0 0-1.2-5.2A8 8 0 0 1 18.9 11zM12 4c.9 1.2 1.7 3.4 2 7h-4c.3-3.6 1.1-5.8 2-7zM5.1 13h2.9c.1 1.9.5 3.7 1.2 5.2A8 8 0 0 1 5.1 13zm2.9-2H5.1a8 8 0 0 1 4.1-5.2c-.7 1.5-1.1 3.3-1.2 5.2zm4 9c-.9-1.2-1.7-3.4-2-7h4c-.3 3.6-1.1 5.8-2 7zm2.8-1.8c.7-1.5 1.1-3.3 1.2-5.2h2.9a8 8 0 0 1-4.1 5.2z"/></svg><b>עברית, אנגלית ורוסית</b>הדרכה בגובה העיניים</div>
+    <div class="t rv rv-d3"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 19a5 5 0 0 1-.9-9.9A7 7 0 0 1 18.6 8 4.5 4.5 0 0 1 18 19H6z"/></svg><b>מעונן? מבטלים חינם</b>ובוחרים יחד תאריך אחר</div>
+  </div>
+</div>
+
+<section class="band" id="offer">
+  <div class="wrap offer">
+    <div class="offer-img rv">
+      <img src="img/card-stars.jpg" alt="קבוצה עומדת בטבעת אור ליד טלסקופ גדול, מעליהם שביל החלב">
+      <span class="badge">הפעילות המבוקשת</span>
+    </div>
+    <div class="offer-t rv rv-d1">
+      <span class="kicker">תצפית כוכבים במכתש רמון</span>
+      <h2>שעתיים שבהן השמיים נפתחים</h2>
+      <p class="lead">מתמקמים על מזרונים בפינת זולה, הלייזר מצייר את קבוצות הכוכבים, ואז הטלסקופים הגדולים: ירח, פלנטות, ערפיליות וגלקסיות.
+      בסוף מצלמים אתכם בחשיפה ארוכה על רקע הכוכבים.</p>
+      <ul class="inc">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7"/></svg><span>טלסקופים גדולים, מזרונים, מחצלות וכסאות</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7"/></svg><span>הדרכה חיה על המזלות, המיתולוגיה והאסטרונומיה</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7"/></svg><span>תמונה שלכם בחשיפה ארוכה עם הכוכבים, במתנה</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7"/></svg><span>מגיל 5, כשעתיים, 10 דקות נסיעה ממצפה רמון</span></li>
+      </ul>
+      <div class="pricebox"><b>180 ₪</b><span>למבוגר בקבוצה פתוחה</span><small>ילדים 4-16: 150 ₪ · ערב פרטי לזוג החל מ-1,200 ₪ · <a href="#prices" style="color:var(--sky)">כל המחירים</a></small></div>
+      <div class="ctas">
+        <a class="btn btn-main" href="https://wa.me/972526052744" data-wa="היי משה, אשמח לפרטים וזמינות לתצפית כוכבים" target="_blank" rel="noopener">לפרטים וזמינות בוואטסאפ</a>
+        <a class="btn btn-ghost" href="#how">איך נראה הערב</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band panel" id="how">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>איך נראה ערב כוכבים במכתש</h2>
+      <p class="lead">נפגשים כעשר דקות נסיעה ממצפה רמון, בשמורת אור הכוכבים. האורות כבים, העיניים מתרגלות, והשמיים מתמלאים.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><span class="n">1</span><img src="img/step-1.jpg" alt="קבוצה יושבת סביב מדורה במדבר"><div class="b"><h3>מתמקמים</h3><p>פינת זולה עם מזרונים על מחצלות, כסאות למי שמעדיף, ומדורה למי שמזמין אירוח מדברי.</p></div></div>
+      <div class="step rv rv-d1"><span class="n">2</span><img src="img/step-2.jpg" alt="מדריך מצביע עם לייזר ירוק אל השמיים ליד מדורה"><div class="b"><h3>מכירים את השמיים</h3><p>עם סמן לייזר עוברים על קבוצות הכוכבים, המזלות וכוכב הצפון, עם סיפורים מהמיתולוגיה ומהאסטרונומיה, בגובה העיניים.</p></div></div>
+      <div class="step rv rv-d2"><span class="n">3</span><img src="img/step-3.jpg" alt="אדם מביט דרך טלסקופ גדול, מעליו שביל החלב"><div class="b"><h3>מסתכלים מקרוב</h3><p>הטלסקופים הגדולים מכוונים לירח, לפלנטות, לצבירים ולגלקסיות. ובסוף, תמונה שלכם בחשיפה ארוכה עם הכוכבים.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="prices">
+  <div class="wrap">
+    <div class="sec-head rv"><h2>ומה המחיר?</h2><p class="lead">מצטרפים לערב פתוח, או מזמינים ערב רק לכם. המחירים כוללים מע"מ.</p></div>
+    <div class="prices">
+      <div class="pcard hot rv">
+        <img src="img/group.jpg" alt="קבוצה יושבת בטבעת אור מתחת לשביל החלב">
+        <h3>מצטרפים לקבוצה</h3>
+        <p class="who">ערב בהרשמה, בעברית. נפתח מ-5 משתתפים, עד 30. טלסקופ לכל 10 משתתפים.</p>
+        <div class="rows">
+          <div class="row"><span>מבוגר<small>מגיל 17</small></span><b>180 ₪</b></div>
+          <div class="row"><span>ילד<small>גיל 4-16</small></span><b>150 ₪</b></div>
+          <div class="row"><span>מתחת לגיל 4</span><b>חינם</b></div>
+        </div>
+        <p class="note">שעון חורף: מחזור ראשון 18:30, מחזור שני 21:30.</p>
+        <a class="btn btn-main btn-sm" href="https://wa.me/972526052744" data-wa="היי משה, אשמח להצטרף לערב כוכבים בקבוצה. מתי יש מקום?" target="_blank" rel="noopener">מתי יש מקום?</a>
+      </div>
+      <div class="pcard rv rv-d1">
+        <img src="img/couple.jpg" alt="זוג בטבעת אור בין שני טלסקופים מתחת לשביל החלב">
+        <h3>ערב פרטי</h3>
+        <p class="who">רק אתם, בשעה שנוחה לכם. בעברית, באנגלית או ברוסית.</p>
+        <div class="rows">
+          <div class="row"><span>זוג, אמצע שבוע<small>ראשון עד רביעי</small></span><b>1,200 ₪</b></div>
+          <div class="row"><span>זוג, סוף שבוע<small>חמישי עד שבת, כולל אירוח מדברי</small></span><b>1,500 ₪</b></div>
+          <div class="row"><span>משפחה<small>עד 10 משתתפים</small></span><b>1,600 ₪</b></div>
+          <div class="row"><span>קבוצה<small>עד 25 משתתפים</small></span><b>2,000 ₪</b></div>
+          <div class="row"><span>קבוצה גדולה<small>עד 40 משתתפים</small></span><b>2,500 ₪</b></div>
+        </div>
+        <a class="btn btn-main btn-sm" href="https://wa.me/972526052744" data-wa="היי משה, אשמח לפרטים על ערב כוכבים פרטי" target="_blank" rel="noopener">לתיאום ערב פרטי</a>
+      </div>
+      <div class="pcard rv rv-d2">
+        <img src="img/family.jpg" alt="משפחה ליד טלסקופ מתחת לשמיים זרועי כוכבים">
+        <h3>תוספות</h3>
+        <div class="rows">
+          <div class="row"><span>אירוח מדברי<small>מדורה, תה ומרשמלו</small></span><b>300 ₪</b></div>
+          <div class="row"><span>טלסקופ נוסף<small>לקבוצות גדולות</small></span><b>300 ₪</b></div>
+        </div>
+        <p class="note">מעל 40 משתתפים, מתמחרים יחד. אפשר לשלב עם טיול ג'יפים באותו אחר צהריים.</p>
+      </div>
+    </div>
+    <div class="policy rv">
+      <p><strong>מעונן?</strong> מבטלים בלי עלות. תקבלו הודעה עד שעתיים לפני, ונבחר יחד תאריך אחר.</p>
+      <p class="note">ביטול מצדכם: עד 14 יום לפני, החזר מלא. עד 7 ימים לפני, החזר של 50%. ביום הפעילות, ללא החזר.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band panel" id="reviews">
+  <div class="wrap">
+    <div class="sec-head rv"><h2>המלצות חמות</h2><p class="lead">מה אומרים מטיילים שיצאו עם משה</p></div>
+    <div class="quotes">
+      <div class="q rv"><div class="mark" aria-hidden="true">”</div><div class="bubble"><div class="by"><span class="av">ט</span><span>טטיאנה לישנצקי<small>תצפית כוכבים</small></span></div><p>בפעם הראשונה בחיי ראינו את הירח, צדק ושביל החלב דרך טלסקופ. זו חוויה בלתי נשכחת לכל החיים. תודה רבה למשה!</p></div><div class="stars" aria-label="חמישה כוכבים">★★★★★</div></div>
+      <div class="q rv rv-d1"><div class="mark" aria-hidden="true">”</div><div class="bubble"><div class="by"><span class="av">ו</span><span>ורדית לייבוביץ'<small>תצפית כוכבים</small></span></div><p>פגשנו את משה לפני 3 שנים לתצפית כוכבים עם קבוצת חברים ועכשיו חזרנו עם הילדים והנכדים. היתה חוויה מרתקת ומעניינת לכל הגילאים.</p></div><div class="stars" aria-label="חמישה כוכבים">★★★★★</div></div>
+      <div class="q rv rv-d2"><div class="mark" aria-hidden="true">”</div><div class="bubble"><div class="by"><span class="av">ש</span><span>שולה<small>טיול ג'יפים במכתש רמון</small></span></div><p>יצאנו קבוצה גדולה עם משה לטיול ג'יפים במכתש רמון. בזכות משה זכינו לטיול מושלם. הידע הרב שלו, אהבת המקום, אהבת האדם, הסבלנות האין סופית, החיוך.</p></div><div class="stars" aria-label="חמישה כוכבים">★★★★★</div></div>
+      <div class="q rv rv-d3"><div class="mark" aria-hidden="true">”</div><div class="bubble"><div class="by"><span class="av">ש</span><span>שלומית עמית פרנקל<small>טיול הליכה</small></span></div><p>היינו קבוצה של 18 אנשים בגילאים 5-75 ומזג אויר שלא היה לטובתינו. משה הצליח לסקרן ולעניין את כולנו. החל מטעימות בטבע, משחקים בצבע, גיאולוגיה, היסטוריה, ארכיאולוגיה והמון הומור.</p></div><div class="stars" aria-label="חמישה כוכבים">★★★★★</div></div>
+    </div>
+    <div class="ctas rv" style="margin-top:36px"><a class="btn btn-main" href="https://wa.me/972526052744" data-wa="היי משה, אשמח לפרטים וזמינות לערב כוכבים" target="_blank" rel="noopener">רוצים גם? לפרטים וזמינות בוואטסאפ</a></div>
+  </div>
+</section>
+
+<section class="gal" aria-label="תמונות מהשטח">
+  <div class="strip">
+    <img src="img/g1.jpg" alt="זוג בטבעת אור ליד טלסקופ, מתחת לשביל החלב" loading="lazy">
+    <img src="img/g3.jpg" alt="נגן עוד עומד בין שני טלסקופים מתחת לשביל החלב" loading="lazy">
+    <img src="img/g2.jpg" alt="משפחה מצביעה לשמיים זרועי הכוכבים" loading="lazy">
+    <img src="img/g4.jpg" alt="הירח בחצי, מצולם דרך טלסקופ" loading="lazy">
+    <img src="img/g8.jpg" alt="אוהלים בלילה בחניון שטח מתחת לכוכבים" loading="lazy">
+    <img src="img/g9.jpg" alt="ערפילית אוריון, צילום אסטרונומי" loading="lazy">
+    <img src="img/g6.jpg" alt="שני ילדים בונים מגדל אבנים במדבר" loading="lazy">
+    <img src="img/g10.jpg" alt="אנשים עומדים על ג'יפ בשקיעה" loading="lazy">
+    <img src="img/g7.jpg" alt="קניון סלע בהרי אילת" loading="lazy">
+    <img src="img/g5.jpg" alt="דקלים ושביל בעין עבדת" loading="lazy">
+  </div>
+</section>
+
+<section class="band" id="more">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>וביום? ג'יפים והליכה</h2>
+      <p class="lead">המכתש הגדול בעולם גם לאור יום. השילוב הכי מבוקש: ג'יפים אחר הצהריים וכוכבים באותו ערב.</p>
+    </div>
+    <div class="two">
+      <article class="card rv" id="jeeps">
+        <img src="img/card-jeep.jpg" alt="משפחה עומדת על גג ג'יפ בשקיעה מעל מכתש רמון" loading="lazy">
+        <div class="card-b">
+          <span class="tag">ביום ובשקיעה</span>
+          <h3>טיולי ג'יפים</h3>
+          <p>עצירות בנקודות המיוחדות של המכתש, צבעי אבן החול, תופעות גאולוגיות וסיפורים על המקום. מתאים לכל גיל.</p>
+          <div class="chips"><span>משעתיים</span><span>מכתש רמון ובקעת צין</span><span>כל הגילאים</span></div>
+          <p class="price">לקבוצה, החל מ-980 ₪<small>אפשר לשלב עם תצפית כוכבים באותו ערב</small></p>
+          <a class="btn btn-main" href="https://wa.me/972526052744" data-wa="היי משה, אשמח לפרטים וזמינות לטיול ג'יפים" target="_blank" rel="noopener">לפרטים וזמינות בוואטסאפ</a>
+        </div>
+      </article>
+      <article class="card rv rv-d1" id="hikes">
+        <img src="img/card-hike.jpg" alt="קבוצת מטיילים עם תרמילים עומדת בלב מכתש רמון" loading="lazy">
+        <div class="card-b">
+          <span class="tag">ברגל</span>
+          <h3>טיולי הליכה</h3>
+          <p>פרסת נקרות, נחל ארדון, מעלה ברוש, סובב הר רמון, עין עבדת והרי אילת. מסלולים קלים למשפחות ומסלולים למיטיבי לכת, עם לינת שטח ומדורה בטיולים הארוכים.</p>
+          <div class="chips"><span>חצי יום, 4-6 שעות</span><span>יום שלם, 8-9 שעות</span><span>2-3 ימים</span></div>
+          <p class="price">מחיר לפי מסלול וגודל קבוצה<small>כולל הדרכה, ביטוח והקפצות</small></p>
+          <a class="btn btn-main" href="https://wa.me/972526052744" data-wa="היי משה, אשמח לפרטים על טיול הליכה" target="_blank" rel="noopener">לפרטים וזמינות בוואטסאפ</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band panel" id="about">
+  <div class="wrap about">
+    <div class="about-t rv">
+      <h2>קצת על משה</h2>
+      <p class="lead">שמי משה קוגן, מורה דרך ותושב מצפה רמון.
+      הגעתי לכאן עם ליאור, אשתי, ב-2014, וכאן הקמנו את המשפחה ואת דזרט סטאר.
+      תמיד אהבתי לטייל במדבר ולחוות את השטח הפראי בלי תיווך.</p>
+      <p class="lead">במכתש התאהבתי גם באסטרונומיה, למדתי וחקרתי אותה, ובימים אלה אני מתמחה בצילום אסטרונומי.
+      עסק משפחתי קטן, שמתעקש על הדרכה שמתאימה בדיוק לקבוצה שמולו: ילדים ומבוגרים, מטיילים ותיקים ומי שזו הפעם הראשונה שלהם במדבר.</p>
+      <blockquote>התמזל מזלי לעסוק בדבר שאני אוהב יותר מכל, ולחלוק עם מטיילים מהארץ ומהעולם את התשוקה שלי לטבע ולמדבר.</blockquote>
+    </div>
+    <img class="rv rv-d1" src="img/about-bg.jpg" alt="אדם יושב ליד מדורה במדבר, מעליו שביל החלב">
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="wrap">
+    <div class="sec-head rv"><h2>שאלות ששואלים אותנו</h2></div>
+    <div class="faq rv">
+      <details><summary>מה להביא לתצפית?</summary><div class="a">בגדים חמים, גם בקיץ. במדבר קר בלילה. נעליים סגורות ומים. את המזרונים, הכסאות והטלסקופים אנחנו מביאים.</div></details>
+      <details><summary>ואם יהיה מעונן?</summary><div class="a">מבטלים בלי עלות. תקבלו הודעה עד שעתיים לפני תחילת הפעילות, ונבחר יחד תאריך אחר.</div></details>
+      <details><summary>איפה נפגשים?</summary><div class="a">בשמורת אור הכוכבים של מכתש רמון, כעשר דקות נסיעה ממצפה רמון. את נקודת המפגש המדויקת שולחים בוואטסאפ אחרי התיאום.</div></details>
+      <details><summary>באיזו שפה ההדרכה?</summary><div class="a">עברית, אנגלית ורוסית. הקבוצה הפתוחה בכרטיסים מתקיימת בעברית בלבד. פעילות פרטית בכל אחת מהשפות.</div></details>
+      <details><summary>מה עם ילדים?</summary><div class="a">ילדים מוזמנים, וההדרכה מותאמת לגיל. בקבוצה הפתוחה ילדים בגיל 4-16 ב-150 ₪, מתחת לגיל 4 חינם.</div></details>
+      <details><summary>אפשר לשלב כמה פעילויות?</summary><div class="a">כן. טיול ג'יפים אחר הצהריים ותצפית כוכבים באותו ערב הוא השילוב הכי מבוקש. בטיולים של כמה ימים יש גם הדרכת אסטרונומיה ליד המדורה.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="band panel" id="contact">
+  <div class="wrap">
+    <div class="sec-head rv"><h2>נתאם לכם ערב?</h2><p class="lead">כתבו בוואטסאפ או השאירו פרטים. חוזרים אליכם עם תאריכים פנויים.</p></div>
+    <div class="contact">
+      <div class="ccard rv">
+        <h3>הכי מהיר: וואטסאפ</h3>
+        <p class="big">ספרו לנו מתי אתם באזור וכמה תהיו, ונחזור עם מה שפנוי.</p>
+        <div class="clist">
+          <a href="https://wa.me/972526052744" data-wa="היי משה, הגעתי מהאתר ואשמח לפרטים וזמינות לערב כוכבים" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3.3 4.4c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.3s1 2.7 1.1 2.9c.2.2 2 3.1 4.9 4.2 2.4.9 2.9.8 3.4.7.5 0 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3l-2-.9c-.3-.1-.5-.2-.7.1l-.9 1.1c-.2.2-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5z"/></svg><span>וואטסאפ 052-605-2744</span></a>
+          <a href="tel:+972526052744"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg><span>טלפון 052-605-2744</span></a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Mitzpe+Ramon" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg><span>מצפה רמון, הנגב</span></a>
+        </div>
+      </div>
+      <form class="form rv rv-d1" id="lead-form">
+        <h3>או השאירו פרטים ונחזור אליכם</h3>
+        <div class="grid2">
+          <label class="f" for="f-name">שם מלא<input id="f-name" name="name" type="text" autocomplete="name" required></label>
+          <label class="f" for="f-phone">מספר טלפון<input id="f-phone" name="phone" type="tel" autocomplete="tel" required></label>
+          <label class="f" for="f-date">מועד מבוקש<input id="f-date" name="date" type="text" placeholder="למשל: חמישי 6.11"></label>
+          <label class="f" for="f-count">כמה תהיו<input id="f-count" name="count" type="text" placeholder="מבוגרים וילדים"></label>
+        </div>
+        <label class="f" for="f-act">איזו פעילות
+          <select id="f-act" name="activity">
+            <option>תצפית כוכבים</option>
+            <option>ערב כוכבים פרטי</option>
+            <option>טיול ג'יפים</option>
+            <option>טיול הליכה</option>
+            <option>שילוב של כמה פעילויות</option>
+          </select>
+        </label>
+        <label class="f" for="f-notes">הערות<textarea id="f-notes" name="notes" placeholder="איפה אתם לנים, בקשות מיוחדות, שפה..."></textarea></label>
+        <button class="btn btn-main" type="submit">שליחה בוואטסאפ</button>
+        <p class="note">הלחיצה פותחת וואטסאפ עם הפרטים שמילאתם. אפשר גם פשוט להתקשר.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <img src="img/logo-full.png" alt="Desert Star">
+    <nav aria-label="קישורים">
+      <a href="https://desertstar.co.il/astronomy/">תצפיות כוכבים</a>
+      <a href="https://desertstar.co.il/jeep_tours/">טיולי ג'יפים</a>
+      <a href="https://desertstar.co.il/tours/">טיולי הליכה</a>
+      <a href="https://desertstar.co.il/blog/">אסטרובלוג</a>
+      <a href="https://desertstar.co.il/elementor-1896/">הצהרת נגישות</a>
+      <a href="https://desertstar.co.il/privacy/">מדיניות פרטיות</a>
+    </nav>
+    <small>Desert Star · משה קוגן · מצפה רמון · 052-605-2744 · <a href="https://desertstar.co.il/">desertstar.co.il</a></small>
+  </div>
+</footer>
+
+<div class="bar" id="bar">
+  <a class="btn btn-main" href="https://wa.me/972526052744" data-wa="היי משה, הגעתי מהאתר ואשמח לפרטים וזמינות לערב כוכבים" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3.3 4.4c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.3s1 2.7 1.1 2.9c.2.2 2 3.1 4.9 4.2 2.4.9 2.9.8 3.4.7.5 0 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3l-2-.9c-.3-.1-.5-.2-.7.1l-.9 1.1c-.2.2-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5z"/></svg>
+    לתיאום ערב כוכבים
+  </a>
+  <a class="btn call" href="tel:+972526052744" aria-label="להתקשר"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg></a>
+</div>
+
+</div>
+<script>
+(function(){
+  var WA='https://wa.me/972526052744';
+  document.querySelectorAll('[data-wa]').forEach(function(a){
+    a.href=WA+'?text='+encodeURIComponent(a.getAttribute('data-wa'));
+  });
+
+  /* lead form -> WhatsApp */
+  var f=document.getElementById('lead-form');
+  if(f){f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=function(id){return (document.getElementById(id).value||'').trim();};
+    var lines=['היי משה, הגעתי מהאתר.',
+      'שם: '+v('f-name'),
+      'טלפון: '+v('f-phone'),
+      'פעילות: '+v('f-act')];
+    if(v('f-date')) lines.push('מועד מבוקש: '+v('f-date'));
+    if(v('f-count')) lines.push('כמה נהיה: '+v('f-count'));
+    if(v('f-notes')) lines.push('הערות: '+v('f-notes'));
+    window.open(WA+'?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener');
+  });}
+
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* scroll reveal */
+  var rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window && !reduce){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    rv.forEach(function(el){io.observe(el);});
+  }else{rv.forEach(function(el){el.classList.add('in');});}
+
+  /* parallax hero + sticky bar */
+  var hero=document.getElementById('top'), layers=hero.querySelectorAll('.layer'), heroIn=document.getElementById('hero-in'), bar=document.getElementById('bar');
+  var ticking=false;
+  function frame(){
+    ticking=false;
+    var y=window.scrollY||window.pageYOffset, h=hero.offsetHeight;
+    if(bar) bar.classList.toggle('on', y>h*0.6);
+    if(reduce || y>h) return;
+    layers.forEach(function(l){
+      var k=parseFloat(l.getAttribute('data-k'))||0;
+      l.style.transform='translate3d(0,'+(y*k).toFixed(1)+'px,0)';
+    });
+    var p=Math.min(1,y/(h*0.7));
+    heroIn.style.transform='translate3d(0,'+(y*0.28).toFixed(1)+'px,0)';
+    heroIn.style.opacity=(1-p*0.9).toFixed(3);
+  }
+  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  frame();
+
+  /* twinkling stars + shooting stars on a canvas behind the hero photo */
+  var cv=document.getElementById('stars');
+  if(cv && cv.getContext && !reduce){
+    var ctx=cv.getContext('2d'), W=0, H=0, stars=[], meteors=[], dpr=Math.min(2,window.devicePixelRatio||1), last=0, nextMeteor=1500;
+    function size(){
+      var r=cv.parentNode.getBoundingClientRect(); W=r.width; H=r.height;
+      cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+      stars=[]; var n=Math.round(W*H/5200);
+      for(var i=0;i<n;i++){stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.3,a:Math.random()*Math.PI*2,s:Math.random()*1.4+.4,c:Math.random()<.15?'199,229,248':'255,255,255'});}
+    }
+    function draw(t){
+      var dt=Math.min(50,t-last); last=t;
+      ctx.clearRect(0,0,W,H);
+      for(var i=0;i<stars.length;i++){
+        var s=stars[i]; s.a+=dt*0.0015*s.s;
+        var al=.35+.65*(0.5+0.5*Math.sin(s.a));
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.283); ctx.fillStyle='rgba('+s.c+','+al.toFixed(2)+')'; ctx.fill();
+      }
+      nextMeteor-=dt;
+      if(nextMeteor<=0 && document.visibilityState==='visible'){
+        nextMeteor=3500+Math.random()*5000;
+        var sx=Math.random()*W*0.9+W*0.05, sy=Math.random()*H*0.35;
+        var ang=Math.PI*(0.15+Math.random()*0.2)*(Math.random()<.5?1:-1);
+        meteors.push({x:sx,y:sy,vx:Math.cos(ang)*(0.9+Math.random()*0.5),vy:Math.abs(Math.sin(ang))*(0.6+Math.random()*0.4)+0.35,life:0,max:700+Math.random()*500});
+      }
+      for(var m=meteors.length-1;m>=0;m--){
+        var k=meteors[m]; k.life+=dt; k.x+=k.vx*dt; k.y+=k.vy*dt;
+        var fade=1-k.life/k.max, len=90;
+        var g=ctx.createLinearGradient(k.x,k.y,k.x-k.vx*len,k.y-k.vy*len);
+        g.addColorStop(0,'rgba(255,255,255,'+(0.95*fade).toFixed(2)+')'); g.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.strokeStyle=g; ctx.lineWidth=1.6; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(k.x,k.y); ctx.lineTo(k.x-k.vx*len,k.y-k.vy*len); ctx.stroke();
+        if(k.life>=k.max || k.x<0 || k.x>W || k.y>H) meteors.splice(m,1);
+      }
+      if(window.scrollY<hero.offsetHeight) requestAnimationFrame(draw); else setTimeout(function(){requestAnimationFrame(draw);},400);
+    }
+    size(); window.addEventListener('resize',size); requestAnimationFrame(draw);
+  }
+})();
+</script>
+</body>
+</html>
